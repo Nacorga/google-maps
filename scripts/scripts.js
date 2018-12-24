@@ -1,5 +1,9 @@
 initMap();
 
+var id = 0;
+var markers = [];
+var infowindow;
+
 function initMap() {
 
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -10,14 +14,15 @@ function initMap() {
         fullscreenControl: false
     });
 
+    var input = document.getElementById('address');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+
     var geocoder = new google.maps.Geocoder();
         document.getElementById('submit').addEventListener('click', function() {
         geocodeAddress(geocoder, map);
     });
 
 }
-
-var markers = [];
 
 function geocodeAddress(geocoder, resultsMap) {
 
@@ -31,24 +36,29 @@ function geocodeAddress(geocoder, resultsMap) {
             resultsMap.setCenter(results[0].geometry.location);
             
             var marker = new google.maps.Marker({
+                id: id,
                 map: resultsMap,
                 position: results[0].geometry.location,
                 title: 'Posición',
                 snippet: results[0].formatted_address,
-                draggable: true,
                 animation: google.maps.Animation.DROP
-            });
+            }, id++);
 
             markers.push(marker);
 
-            var infowindow = new google.maps.InfoWindow({
-                content: '<div class="custom-iw"><p><b>' + marker.title + '</b></p><p>' + marker.snippet + '<p></div>'
-            });
-
             marker.addListener('click', function() {
-                $('#remove-marker').css('display', 'block');
-                $('#remove-marker').attr('data-place', results[0].place_id);
-                infowindow.open(map, marker);
+
+                infowindow = new google.maps.InfoWindow({
+                    content: '<div class="custom-iw"><p><b>' + this.title + '</b></p><p>' + this.snippet + '<p></div>',
+                });
+
+                console.log(infowindow);
+
+                infowindow.open(map, this);
+
+                $('#remove-marker').addClass('active');
+                $('#remove-marker').attr('data-id', marker.id);
+
             });
 
         } else {
@@ -60,13 +70,13 @@ function geocodeAddress(geocoder, resultsMap) {
 }
 
 function deleteMarker() {
-    console.log(markers);
-    // var marker = markers[id]; // find the marker by given id
-    // marker.setMap(null);
+
+    let idd = parseInt($('#remove-marker').attr('data-id'));
+
+    var result = markers.filter(obj => {
+        return obj.id === idd
+    });
+
+    result[0].setMap(null);
+
 }
-
-
-$(document).ready(function() {
-
-
-});

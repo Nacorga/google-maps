@@ -14,21 +14,73 @@
 
 <body>
 
-    <!-- <div id="floating-panel">
-        <input id="address" type="textbox">
-        <button id="submit" class="btn-outline-dark" type="button" value="Geocode">Geocode</button>
-    </div> -->
+    <div class="data-container">
 
-    <div id="floating-panel" class="input-group mb-3">
-        <input type="text" id="address" class="form-control">
-            <div class="input-group-append">
-            <button id="submit" class="btn btn-secondary" type="button" value="Geocode">Geocode</button>
+        <div class="title">
+            <img src="img/gm-marker.png">
+            <h2>Add Place</h2>
         </div>
+
+            <form>
+
+                <div class="input-box field-input">
+                    <label><b>Place name</b></label>
+                    <input type="text" name="palcename" id="name" class="form-control">
+                </div>
+                
+                <div id="floating-panel" class="input-box input-group">
+                    <label><b>Add location</b></label>
+                    <input type="text" id="address" class="form-control" placeholder="">
+                        <div class="input-group-append">
+                        <button id="submit" class="btn btn-secondary" type="button" value="Geocode">Geocode</button>
+                    </div>
+                </div>
+
+                <div class="input-box form-check field-checkbox">
+                    <label><b>Place type</b></label>
+                    <ul>
+                        <li>
+                            <input class="form-check-input" type="checkbox" value="Beach and sun" id="defaultCheck1">
+                            <label class="form-check-label" for="defaultCheck1">Beach and sun</label>
+                        </li>
+                        <li>
+                            <input class="form-check-input" type="checkbox" value="Nature" id="defaultCheck2">
+                            <label class="form-check-label" for="defaultCheck2">Nature</label>
+                        </li>
+                        <li>
+                            <input class="form-check-input" type="checkbox" value="Cultural" id="defaultCheck3">
+                            <label class="form-check-label" for="defaultCheck3">Cultural</label>
+                        </li>
+                        <li>
+                            <input class="form-check-input" type="checkbox" value="Gourmet" id="defaultCheck4">
+                            <label class="form-check-label" for="defaultCheck4">Gourmet</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="input-box form-textarea form-group">
+                    <label for="exampleFormControlTextarea1"><b>Add description</b></label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+
+                <div class="input-box">
+                    <button type="button" class="btn btn-outline-primary">Upload photo</button>
+                </div>
+
+            </form>
+
+            <div class="buttons-box">
+                <button onclick="deleteMarker()" type="button" id="btn-remove" class="action-btn btn btn-danger">Remove marker</button>
+                <button onclick="addMarker()" type="button" id="btn-add" class="action-btn btn btn-primary">Add place</button>
+            </div>
+
     </div>
 
-    <button onclick="deleteMarker()" id="remove-marker" type="button" class="btn btn-danger">Remove marker</button>
+    <div class="map-container">
 
-    <div id='map'></div>
+        <div id='map'></div>
+
+    </div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnADiF1WxWLRWrt9DLVheG-1_quECOKOM&libraries=places"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

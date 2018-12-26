@@ -2,43 +2,104 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    display: flex;
 }
 
-#map {
-    width: 100%;
+.data-container {
+
+    width: 30%;
+    padding: 15px;
+
+    .title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+
+        img {
+            margin-right: 15px;
+            height: 30px;
+        }
+
+        h2 {
+            margin-bottom: 0;
+        }
+    }
+
+    .input-box {
+        width: 80%;
+
+        &.field-input {
+            label,
+            input {
+                display: block;
+                width: 100%;
+            }
+        }
+
+        &:not(:first-child) {
+            margin-top: 20px;
+        }
+
+        &.field-checkbox {
+            padding: 0;
+            ul {
+                padding-left: 1.25rem;
+                display: flex;
+                flex-wrap: wrap;
+            }
+            li {
+                width: 50%;
+            }
+        }
+
+        .form-control:focus,
+        .btn-secondary:focus {
+            box-shadow: none;
+        }
+    }
+
+    #floating-panel {
+        width: 80%;
+
+        label {
+            width: 100%;
+        }
+    }
+
+    .buttons-box {
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        z-index: 5;
+        display: flex;
+
+        #btn-remove {
+            display: none;
+            margin-right: 15px;
+            &.active {
+                display: block;
+            }
+        }
+    }
+}
+
+.map-container {
+
+    width: 70%;
     height: 100vh;
-}
+    position: relative;
 
-#floating-panel {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    z-index: 5;
-    width: 450px;
-    box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.24), 0 0 6px 0 rgba(0, 0, 0, 0.06);
-
-    .form-control:focus,
-    .btn-secondary:focus {
-        box-shadow: none;
+    #map {
+        width: 100%;
+        height: 100vh;
     }
-}
-
-#remove-marker {
-    display: none;
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    z-index: 5;
-
-    &.active {
-        display: block;
+    
+    .custom-iw {
+        p {
+            font-size: 14px;
+            line-height: 20px;
+            margin-bottom: 0;
+        }
     }
-}
 
-.custom-iw {
-    p {
-        font-size: 14px;
-        line-height: 20px;
-        margin-bottom: 0;
-    }
 }

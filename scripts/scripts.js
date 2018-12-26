@@ -1,12 +1,14 @@
 initMap();
 
+var map;
 var id = 0;
 var markers;
 var infowindow;
+var myResults;
 
 function initMap() {
 
-    var map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 40, lng: -3.75},
         zoom: 5.75,
         streetViewControl: false,
@@ -16,97 +18,32 @@ function initMap() {
 
     var input = document.getElementById('address');
     var autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.setComponentRestrictions(
+        {'country': 'es'}
+    );
 
     var geocoder = new google.maps.Geocoder();
         document.getElementById('submit').addEventListener('click', function() {
-        geocodeAddress(geocoder, map);
+        geocodeAddress(geocoder);
     });
 
 }
 
-function geocodeAddress(geocoder, resultsMap) {
+function geocodeAddress(geocoder) {
 
     var address = document.getElementById('address').value;
 
     geocoder.geocode({'address': address}, function(results, status) {
 
+        myResults = results;
+
         if (status === 'OK') {
 
-            if ( resultsMap.getZoom() != 10 ) {
-                resultsMap.setZoom(10);
+            if ( map.getZoom() != 10 ) {
+                map.setZoom(10);
             }
 
-            resultsMap.setCenter(results[0].geometry.location);
-
-            if (markers) {
-
-                var repMarker = false;
-
-                for (let i = 0; i < markers.length; i++) {
-                    if ( markers[i].title === results[0].address_components[0].long_name ) {
-                        repMarker = true;
-                    }
-                }
-
-                if ( repMarker === true ) {
-
-                    alert('Marcador repetido');
-
-                } else {
-
-                    var marker = new google.maps.Marker({
-                        id: id,
-                        map: resultsMap,
-                        position: results[0].geometry.location,
-                        title: results[0].address_components[0].long_name,
-                        snippet: results[0].formatted_address,
-                        animation: google.maps.Animation.DROP
-                    }, id++);
-        
-                    markers.push(marker);
-        
-                    marker.addListener('click', function() {
-        
-                        infowindow = new google.maps.InfoWindow({
-                            content: '<div class="custom-iw"><p>' + this.snippet + '<p></div>',
-                        });
-        
-                        infowindow.open(map, this);
-        
-                        $('#remove-marker').addClass('active');
-                        $('#remove-marker').attr('data-id', marker.id);
-        
-                    });
-                }
-
-            } else {
-
-                var marker = new google.maps.Marker({
-                    id: id,
-                    map: resultsMap,
-                    position: results[0].geometry.location,
-                    title: results[0].address_components[0].long_name,
-                    snippet: results[0].formatted_address,
-                    animation: google.maps.Animation.DROP
-                }, id++);
-    
-                markers = [];
-                markers.push(marker);
-    
-                marker.addListener('click', function() {
-    
-                    infowindow = new google.maps.InfoWindow({
-                        content: '<div class="custom-iw"><p>' + this.snippet + '<p></div>',
-                    });
-    
-                    infowindow.open(map, this);
-    
-                    $('#remove-marker').addClass('active');
-                    $('#remove-marker').attr('data-id', marker.id);
-    
-                });
-
-            }
+            map.setCenter(results[0].geometry.location);
 
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
@@ -118,7 +55,7 @@ function geocodeAddress(geocoder, resultsMap) {
 
 function deleteMarker() {
 
-    let idd = parseInt($('#remove-marker').attr('data-id'));
+    let idd = parseInt($('.action-btn').attr('data-id'));
 
     var result = markers.filter(obj => {
         return obj.id === idd
@@ -133,15 +70,128 @@ function deleteMarker() {
     markers.splice(removeIndex, 1); // Remove marker from array
     
     if (markers.length == 0) {
-        $('#remove-marker').removeClass('active');
+        $('#btn-remove').removeClass('active');
     }
+
+    saveMarkers();
 
 }
 
-function getPlaces() {
+function addMarker () {
+
+    var type = [];
+
+    $('.form-check-input:checked').each(function(i) {
+        type.push($(this).val());
+    });
+
+    if (markers) {
+
+        var repMarker = false;
+
+        for (let i = 0; i < markers.length; i++) {
+            if ( markers[i].title === myResults[0].address_components[0].long_name ) {
+                repMarker = true;
+            }
+        }
+
+        if ( repMarker === true ) {
+
+            alert('Marcador repetido');
+
+        } else {
+
+            var marker = new google.maps.Marker({
+                id: id,
+                map: map,
+                position: myResults[0].geometry.location,
+                title: myResults[0].address_components[0].long_name,
+                snippet: myResults[0].formatted_address,
+                name: document.getElementById('name').value,
+                tipo: type,
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            }, id++);
+
+            markers.push(marker);
+
+            marker.addListener('click', function() {
+
+                infowindow = new google.maps.InfoWindow({
+                    content: 
+                    `<div class="custom-iw">
+                        <p><b>` + this.name + `</b><p>
+                        <p>Location: ` + this.title + `<p>
+                    </div>`,
+                });
+
+                infowindow.open(map, this);
+
+                $('#btn-remove').addClass('active');
+                $('.action-btn').attr('data-id', marker.id);
+
+            });
+        }
+
+    } else {
+
+        var marker = new google.maps.Marker({
+            id: id,
+            map: map,
+            position: myResults[0].geometry.location,
+            title: myResults[0].address_components[0].long_name,
+            snippet: myResults[0].formatted_address,
+            name: document.getElementById('name').value,
+            tipo: type,
+            draggable: true,
+            animation: google.maps.Animation.DROP
+        }, id++);
+
+        markers = [];
+        markers.push(marker);
+
+        marker.addListener('click', function() {
+
+            infowindow = new google.maps.InfoWindow({
+                content: 
+                `<div class="custom-iw">
+                    <p><b>` + this.name + `</b><p>
+                    <p>Location: ` + this.title + `<p>
+                </div>`,
+            });
+
+            infowindow.open(map, this);
+
+            $('#btn-remove').addClass('active');
+            $('.action-btn').attr('data-id', marker.id);
+
+        });
+
+    }
+
+    saveMarkers();
+
+}
+
+function saveMarkers() {
+
+    var miObj;
 
     for (let i = 0; i < markers.length; i++) {
-        console.log(markers[i]);
+
+        miObj = {
+            id: markers[i].id,
+            place: markers[i].snippet,
+            type: markers[i].tipo,
+            position: {
+                lat: markers[i].getPosition().lat(),
+                lng: markers[i].getPosition().lng()
+            }
+
+        }
+
     }
+
+    console.log( miObj );
 
 }

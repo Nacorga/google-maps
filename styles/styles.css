@@ -1,33 +1,64 @@
 body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  display: flex; }
 
-#map {
-  width: 100%;
-  height: 100vh; }
+.data-container {
+  width: 30%;
+  padding: 15px; }
+  .data-container .title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px; }
+    .data-container .title img {
+      margin-right: 15px;
+      height: 30px; }
+    .data-container .title h2 {
+      margin-bottom: 0; }
+  .data-container .input-box {
+    width: 80%; }
+    .data-container .input-box.field-input label,
+    .data-container .input-box.field-input input {
+      display: block;
+      width: 100%; }
+    .data-container .input-box:not(:first-child) {
+      margin-top: 20px; }
+    .data-container .input-box.field-checkbox {
+      padding: 0; }
+      .data-container .input-box.field-checkbox ul {
+        padding-left: 1.25rem;
+        display: flex;
+        flex-wrap: wrap; }
+      .data-container .input-box.field-checkbox li {
+        width: 50%; }
+    .data-container .input-box .form-control:focus,
+    .data-container .input-box .btn-secondary:focus {
+      box-shadow: none; }
+  .data-container #floating-panel {
+    width: 80%; }
+    .data-container #floating-panel label {
+      width: 100%; }
+  .data-container .buttons-box {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    z-index: 5;
+    display: flex; }
+    .data-container .buttons-box #btn-remove {
+      display: none;
+      margin-right: 15px; }
+      .data-container .buttons-box #btn-remove.active {
+        display: block; }
 
-#floating-panel {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  z-index: 5;
-  width: 450px;
-  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.24), 0 0 6px 0 rgba(0, 0, 0, 0.06); }
-  #floating-panel .form-control:focus,
-  #floating-panel .btn-secondary:focus {
-    box-shadow: none; }
-
-#remove-marker {
-  display: none;
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  z-index: 5; }
-  #remove-marker.active {
-    display: block; }
-
-.custom-iw p {
-  font-size: 14px;
-  line-height: 20px;
-  margin-bottom: 0; }
+.map-container {
+  width: 70%;
+  height: 100vh;
+  position: relative; }
+  .map-container #map {
+    width: 100%;
+    height: 100vh; }
+  .map-container .custom-iw p {
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 0; }

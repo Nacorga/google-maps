@@ -124,9 +124,14 @@ function deleteMarker() {
         return obj.id === idd
     });
 
-    markers.splice(result[0], 1); // Remove marker from array
     result[0].setMap(null); // Remove marker from map
 
+    var removeIndex = markers.map(function(item) {
+        return item.id;
+    }).indexOf(idd);
+
+    markers.splice(removeIndex, 1); // Remove marker from array
+    
     if (markers.length == 0) {
         $('#remove-marker').removeClass('active');
     }
